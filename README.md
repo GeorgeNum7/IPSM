@@ -1,11 +1,11 @@
-# How to Use Diffusion Priors under Sparse Views?
+# Code for How to Use Diffusion Priors under Sparse Views? (NeurIPS 2024)
 
 ## Installation
 
 Ubuntu 22.04, CUDA 11.3, PyTorch 1.12.1
 
 ``````
-conda env create --file environment.yml
+conda env create --file environment.yaml
 conda activate ipsm
 
 pip install ./submodules/diff-gaussian-rasterization-confidence ./simple-knn
@@ -18,7 +18,7 @@ mkdir pretrained_models
 cd pretrained_models
 ```
 
-Download [StableDiffusion-v1.5](https://huggingface.co/runwayml/stable-diffusion-v1-5), [StableDiffusionInpainting-v1.5](https://huggingface.co/runwayml/stable-diffusion-inpainting), [MiDaS](https://github.com/isl-org/MiDaS), [BLIP](https://huggingface.co/Salesforce/blip-image-captioning-base) to ```./pretrained_models/```
+Download [StableDiffusion-v1.5](https://huggingface.co/runwayml/stable-diffusion-v1-5), [StableDiffusionInpainting-v1.5](https://huggingface.co/runwayml/stable-diffusion-inpainting), [MiDaS](https://github.com/isl-org/MiDaS), [BLIP](https://huggingface.co/Salesforce/blip-image-captioning-base) to ```./pretrained_models/```. (NOTE: Stable Diffusion V1.5 and Stable Diffusion Inpainting V1.5 cannot be downloaded from the original repo, but the same weight can be obtained from other clone repo.)
 
 ## Data Preparation
 
@@ -35,7 +35,7 @@ Download [StableDiffusion-v1.5](https://huggingface.co/runwayml/stable-diffusion
 3. Randomly select one image from sparse views and run BLIP to obtain its blip-based text results:
 
     ```
-    python blip_script.py
+    python ./scripts/script_for_blip.py
     ```
 
 4. The data format is supposed to be:
@@ -92,21 +92,19 @@ Download [StableDiffusion-v1.5](https://huggingface.co/runwayml/stable-diffusion
         |- ...
     ```
 
-## Training
+## Training & Rendering & Evaluating
 
-Train IPSM-Gaussian on the LLFF dataset with 3 views:
+Train & Render & Evaluate IPSM-Gaussian on the LLFF dataset with 3 views:
 
-Train IPSM-Gaussian on the DTU dataset with 3 views:
+```
+python ./scripts/script_for_llff.py
+```
 
-## Rendering
+Train & Render & Evaluate IPSM-Gaussian on the LLFF dataset with 3 views:
 
-Render images:
-
-## Evaluation
-
-Evaluate results on the LLFF dataset:
-
-Evaluate results on the DTU dataset:
+```
+python ./scripts/script_for_dtu.py
+```
 
 ## Acknowledgement
 
