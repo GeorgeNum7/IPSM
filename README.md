@@ -109,3 +109,16 @@ python ./scripts/script_for_dtu.py
 ## Acknowledgement
 
 This code is developed on [gaussian-splatting](https://github.com/graphdeco-inria/gaussian-splatting), [FSGS](https://github.com/VITA-Group/FSGS), and [DNGaussian](https://github.com/Fictionarry/DNGaussian). Thanks for these great projects!
+
+## Citation
+
+```
+@inproceedings{
+wang2024how,
+title={How to Use Diffusion Priors under Sparse Views?},
+author={Qisen Wang and Yifan Zhao and Jiawei Ma and Jia Li},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=i6BBclCymR}
+}
+```
