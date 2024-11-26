@@ -64,13 +64,9 @@ def training(dataset, opt, pipe, abla, args):
     blip_rst = read_blip_rst.split(':')[-1]
     print(random_select_info, blip_rst)
     if args.add_sd_guidance or args.add_warp_sds_guidance or args.add_warp_sds_guidance_2 or args.add_sds_guidance:
-        sd_guidance = StableDiffusionGuidance(blip_rst=blip_rst, use_lora=(args.use_lora or args.use_lora_2), use_sd15=(args.add_warp_sds_guidance_2 or args.add_sds_guidance), guidance_scale=args.guidance_scale)
+        sd_guidance = StableDiffusionGuidance(blip_rst=blip_rst, use_lora=False, use_sd15=(args.add_warp_sds_guidance_2 or args.add_sds_guidance), guidance_scale=args.guidance_scale)
         sd_guidance.configure()
-        if(args.use_lora or args.use_lora_2):
-            lora_optimizer = torch.optim.AdamW(
-                sd_guidance.lora_layers.parameters(), 
-                lr=args.sd_lora_lr,    
-            )
+        
     process_log(args.model_path, opt=opt, abla=abla, text=None, refresh=True)
     record_training(args, init=True)
     testing_iterations, saving_iterations, checkpoint_iterations, checkpoint, debug_from = args.test_iterations, \
@@ -125,10 +121,7 @@ def training(dataset, opt, pipe, abla, args):
         bg_mask = (bg_mask | (gt_image.mean(0, keepdim=True) > 0.99))
         Ll1 =  l1_loss_mask(image, gt_image * (~bg_mask).float().repeat(3,1,1))
         loss = ((1.0 - opt.lambda_dssim) * Ll1 + opt.lambda_dssim * (1.0 - ssim(image, gt_image)))
-        if (args.add_sd_guidance or args.add_warp_sds_guidance or args.add_warp_sds_guidance_2 or args.add_sds_guidance) and (iteration > args.lora_start_iter) and (args.use_lora or args.use_lora_2):
-            gt_image_512 = torch.nn.functional.interpolate(gt_image.unsqueeze(0), size=(512, 512), mode='bilinear', align_corners=False)
-            lora_loss_seen = sd_guidance.train_lora(gt_image=gt_image_512, rendered_image=gt_image_512, guidance_scale=args.guidance_scale)
-            loss += args.sd_lora_weight * lora_loss_seen
+        
         rendered_depth = render_pkg["depth"][0]
         midas_depth = torch.tensor(viewpoint_cam.depth_image).cuda()
         rendered_depth = rendered_depth.reshape(-1, 1)
@@ -247,11 +240,7 @@ def training(dataset, opt, pipe, abla, args):
                     "loss_sds_1": loss_sds_1.item(),
                 }
                 training_step_report(tb_writer, iteration, **loss_dict)
-        if((args.add_sd_guidance or args.add_warp_sds_guidance or args.add_warp_sds_guidance_2 or args.add_sds_guidance) and (args.use_lora or args.use_lora_2) and iteration > args.lora_start_iter):
-            loss_dict = {
-                "lora_loss_seen": lora_loss_seen.item(),
-            }
-            training_step_report(tb_writer, iteration, **loss_dict)
+        
         with torch.no_grad():
             ema_loss_for_log = 0.4 * loss.item() + 0.6 * ema_loss_for_log
             if iteration % 10 == 0:
@@ -277,10 +266,7 @@ def training(dataset, opt, pipe, abla, args):
             if iteration < opt.iterations:
                 gaussians.optimizer.step()
                 gaussians.optimizer.zero_grad(set_to_none = True)
-                if args.add_sd_guidance or args.add_warp_sds_guidance or args.add_warp_sds_guidance_2 or args.add_sds_guidance:
-                    if(args.use_lora or args.use_lora_2):
-                        lora_optimizer.step()
-                        lora_optimizer.zero_grad()
+                
             gaussians.update_learning_rate(iteration)
             if (iteration - args.start_sample_pseudo - 1) % opt.opacity_reset_interval == 0 and \
                     iteration > args.start_sample_pseudo:
