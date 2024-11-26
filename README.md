@@ -100,7 +100,7 @@ Train & Render & Evaluate IPSM-Gaussian on the LLFF dataset with 3 views:
 python ./scripts/script_for_llff.py
 ```
 
-Train & Render & Evaluate IPSM-Gaussian on the LLFF dataset with 3 views:
+Train & Render & Evaluate IPSM-Gaussian on the DTU dataset with 3 views:
 
 ```
 python ./scripts/script_for_dtu.py
