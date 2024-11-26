@@ -163,9 +163,6 @@ def training(dataset, opt, pipe, abla, args):
                 sd_mask_1_512 = torch.nn.functional.interpolate(sd_mask_1.float(), size=(512, 512), mode='bilinear', align_corners=False)
                 sd_mask_1_512 = (sd_mask_1_512 > 0.5).float()
                 sd_img_1_512 = torch.nn.functional.interpolate(sd_img_1, size=(512, 512), mode='bilinear', align_corners=False)
-                sd_mask_1_inv = (~sd_mask_1).float()
-                sd_mask_1_inv_512 = torch.nn.functional.interpolate(sd_mask_1_inv, size=(512, 512), mode='bilinear', align_corners=False)
-                sd_mask_1_inv_512 = (sd_mask_1_inv_512 > 0.5).float()
                 rendered_img_pseudo_BCHW = rendered_img_pseudo.unsqueeze(0)
                 rendered_img_pseudo_512 = torch.nn.functional.interpolate(rendered_img_pseudo_BCHW, size=(512, 512), mode='bilinear', align_corners=False)
                 if args.use_lora:
@@ -366,7 +363,6 @@ if __name__ == "__main__":
     parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[20_00, 50_00, 10_000])
     parser.add_argument("--start_checkpoint", type=str, default = None)
     parser.add_argument("--train_bg", action="store_true")
-    parser.add_argument('--show_warp', action='store_true', default=False)
     parser.add_argument('--my_debug', action='store_true', default=False)
     args = parser.parse_args(sys.argv[1:])
     args.save_iterations.append(args.iterations)
