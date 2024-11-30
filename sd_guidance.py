@@ -553,7 +553,7 @@ class StableDiffusionGuidance:
             device=self.device,
         )
         noise = torch.randn_like(latents)
-        noisy_latents = self.scheduler_lora.add_noise(latents, noise, t)
+        noisy_latents = self.scheduler.add_noise(latents, noise, t)
         latent_model_input = torch.cat([noisy_latents] * 2) if self.do_classifier_free_guidance else noisy_latents
         latent_model_input = pipe.scheduler.scale_model_input(latent_model_input, t)
         if num_channels_unet == 9:
