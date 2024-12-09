@@ -408,7 +408,6 @@ class GaussianModel:
 
     def proximity(self, scene_extent, N = 3):
         dist, nearest_indices = distCUDA2(self.get_xyz)
-        print(nearest_indices.shape)
         selected_pts_mask = torch.logical_and(dist > (5. * scene_extent),
                                               torch.max(self.get_scaling, dim=1).values > (scene_extent))
 
