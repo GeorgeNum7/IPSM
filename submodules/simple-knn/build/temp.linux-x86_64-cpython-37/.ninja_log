@@ -1,4 +1,0 @@
-# ninja log v5
-0	8425	1704345540705891148	/media/localdisk1/wqs/code/sparse3D/FSGS/submodules/simple-knn/build/temp.linux-x86_64-cpython-37/simple_knn.o	53e42a8f2fee2ce5
-0	15072	1704345547337902145	/media/localdisk1/wqs/code/sparse3D/FSGS/submodules/simple-knn/build/temp.linux-x86_64-cpython-37/ext.o	72cb0b0c386f284
-1	33618	1704345565893931881	/media/localdisk1/wqs/code/sparse3D/FSGS/submodules/simple-knn/build/temp.linux-x86_64-cpython-37/spatial.o	e60a94cf077d5fba
